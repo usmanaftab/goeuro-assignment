@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -37,12 +38,13 @@ public class ServiceClient {
 	 * @param url defines endpoint.
 	 * @return the StringReader point to Json string.
 	 */
-	public StringReader makeGetRequest(String url) {
+	public StringReader makeGetRequest(URI uri) {
 		HttpURLConnection httpConnection = null;
 		StringBuilder sb = new StringBuilder();
 		
 		try{
-			URL restServiceURL = new URL(url);
+			
+			URL restServiceURL = uri.toURL();
 			httpConnection = (HttpURLConnection) restServiceURL.openConnection();
 			httpConnection.setRequestMethod(RequestType.GET.getValue());
 			httpConnection.setRequestProperty(RESPONSE_PROPERTY, responseType.getValue());
@@ -60,17 +62,17 @@ public class ServiceClient {
 				sb.append(output);
 			}
 		} catch (MalformedURLException ex ){
-			logger.error("Cannot create url: " + url);
-			throw new RuntimeException("Cannot create url: " + url, ex);
+			logger.error("Cannot create url: " + uri.toASCIIString());
+			throw new RuntimeException("Cannot create url: " + uri.toASCIIString(), ex);
 		} catch (Exception ex){
-			logger.error("Error while making get request for url: " + url + "\nError: " + ex.getMessage());
-			throw new RuntimeException("Error while making get request for url: " + url + "\nError: " + ex.getMessage(), ex);
+			logger.error("Error while making get request for url: " + uri.toASCIIString() + "\nError: " + ex.getMessage());
+			throw new RuntimeException("Error while making get request for url: " + uri.toASCIIString() + "\nError: " + ex.getMessage(), ex);
 		}finally {
 			if (httpConnection != null) {
 				httpConnection.disconnect();
 			}
 		}
-		logger.debug("Response for url: " + url + " is \n" + sb.toString());
+		logger.debug("Response for url: " + uri.toASCIIString() + " is \n" + sb.toString());
 		return new StringReader(sb.toString());
 	}
 

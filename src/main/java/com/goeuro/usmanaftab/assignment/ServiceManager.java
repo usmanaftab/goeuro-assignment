@@ -11,6 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 import static com.goeuro.usmanaftab.assignment.Constants.*;
 
@@ -24,6 +28,7 @@ public class ServiceManager {
 	
 	private static final String TARGET_URL = AppProperties.instance().getProperty(TARGET_URL_PROP_NAME);
 	private static final String OUTPUT_FILE_NAME = AppProperties.instance().getProperty(OUTPUT_FILE_PROP_NAME);
+	private static final String ENCODING_SCHEME = "UTF-8";
 	
 	private static ServiceManager INSTANCE = new ServiceManager();
 	
@@ -62,12 +67,28 @@ public class ServiceManager {
 	/**
 	 * Appends queryString at the end of TARGET_URL defined in application.properties
 	 * Hit RestFul webservice and return StringReader pointing to Json response string.
+	 * Th
 	 * @param queryString to be appended at the end of TARGET_URL.
 	 * @return StringReader pointing to Json response string.
+	 * @throws runtime exception if its not able to construct a valid url.
 	 */
 	public StringReader getServiceResponse(String queryString) {
 		ServiceClient endPointClient = ServiceClientFactory.getJsonServiceClient();
-		return endPointClient.makeGetRequest(String.format(TARGET_URL, queryString));
+		return endPointClient.makeGetRequest(getURI(queryString));
+	}
+	
+	/**
+	 * Construct URI by encoding query string first and then appending it to TARGET_URL.
+	 * @param queryString the query string.
+	 * @return resultant uri.
+	 * @throws an IllegalArgument exception in case method is not able to construct a valid uri.
+	 */
+	public URI getURI(String queryString) {
+		try {
+		return new URI(String.format(TARGET_URL, URLEncoder.encode(queryString, ENCODING_SCHEME)));
+		} catch (Exception ex) {
+			throw new IllegalArgumentException("Unable to construct url from query string: " + queryString);
+		}
 	}
 	
 	/**
@@ -102,7 +123,6 @@ public class ServiceManager {
 			logger.error("Unable to create CSV file");
 			throw new RuntimeException(ex.getMessage(), ex);
 		}
-		
 	}
 
 }

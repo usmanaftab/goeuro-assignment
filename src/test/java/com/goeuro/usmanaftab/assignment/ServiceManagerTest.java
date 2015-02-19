@@ -10,11 +10,13 @@ import org.mockserver.socket.PortFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
+
 import java.io.IOException;
 
 import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
-
 import static com.goeuro.usmanaftab.assignment.Constants.*;
 import static com.goeuro.usmanaftab.assignment.ConstantsForTest.*;
 
@@ -112,5 +114,11 @@ public class ServiceManagerTest {
         ServiceManager.instance().queryAndCreateCSV("germany");
         String outputString = UtilsForTest.readFile(AppProperties.instance().getProperty(OUTPUT_FILE_PROP_NAME));
         Assert.assertEquals(outputString, "377387, Waldkirchen (Niederbay.), location, 48.732540130615234, 13.600847244262695");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testWrongUrlCreation() {
+        logger.debug("testing - testWrongUrlCreation");
+        ServiceManager.instance().getURI(null);
     }
 }
