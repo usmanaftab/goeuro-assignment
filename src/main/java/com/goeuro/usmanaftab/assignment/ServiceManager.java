@@ -1,22 +1,21 @@
 package com.goeuro.usmanaftab.assignment;
 
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
-import com.google.gson.Gson;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.goeuro.usmanaftab.assignment.Constants.OUTPUT_FILE_PROP_NAME;
+import static com.goeuro.usmanaftab.assignment.Constants.TARGET_URL_PROP_NAME;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
-import static com.goeuro.usmanaftab.assignment.Constants.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
+import com.google.gson.Gson;
 
 /**
  * 
@@ -28,7 +27,7 @@ public class ServiceManager {
 	
 	private static final String TARGET_URL = AppProperties.instance().getProperty(TARGET_URL_PROP_NAME);
 	private static final String OUTPUT_FILE_NAME = AppProperties.instance().getProperty(OUTPUT_FILE_PROP_NAME);
-	private static final String ENCODING_SCHEME = "UTF-8";
+	private static final String ENCODING_SCHEME = "ASCII";
 	
 	private static ServiceManager INSTANCE = new ServiceManager();
 	
@@ -85,7 +84,7 @@ public class ServiceManager {
 	 */
 	public URI getURI(String queryString) {
 		try {
-		return new URI(String.format(TARGET_URL, URLEncoder.encode(queryString, ENCODING_SCHEME)));
+		return new URI(String.format(TARGET_URL, URLEncoder.encode(queryString, ENCODING_SCHEME).replace("+", "%20")));
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Unable to construct url from query string: " + queryString);
 		}

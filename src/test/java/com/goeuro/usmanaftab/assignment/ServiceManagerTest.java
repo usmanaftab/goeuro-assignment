@@ -1,6 +1,19 @@
 package com.goeuro.usmanaftab.assignment;
 
-import org.junit.*;
+import static com.goeuro.usmanaftab.assignment.Constants.OUTPUT_FILE_PROP_NAME;
+import static com.goeuro.usmanaftab.assignment.ConstantsForTest.LARGE_FILENAME;
+import static com.goeuro.usmanaftab.assignment.ConstantsForTest.SINGLE_ROW_FILENAME;
+import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndProxy;
 import org.mockserver.model.Header;
@@ -9,16 +22,6 @@ import org.mockserver.model.HttpResponse;
 import org.mockserver.socket.PortFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
-
-import java.io.IOException;
-
-import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
-import static com.goeuro.usmanaftab.assignment.Constants.*;
-import static com.goeuro.usmanaftab.assignment.ConstantsForTest.*;
 
 /**
  * 

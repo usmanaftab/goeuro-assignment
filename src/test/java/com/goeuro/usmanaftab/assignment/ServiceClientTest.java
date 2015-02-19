@@ -1,9 +1,17 @@
 package com.goeuro.usmanaftab.assignment;
 
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
-import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
+import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 
-import org.junit.*;
+import java.io.IOException;
+import java.io.StringReader;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndProxy;
 import org.mockserver.model.Header;
@@ -13,15 +21,8 @@ import org.mockserver.socket.PortFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-
-import static com.goeuro.usmanaftab.assignment.Constants.TARGET_URL_PROP_NAME;
-import static org.mockserver.integration.ClientAndProxy.startClientAndProxy;
-import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClient;
+import com.goeuro.usmanaftab.assignment.serviceclient.ServiceClientFactory;
 
 /**
  * Created by usmanaftab on 2/19/15.
